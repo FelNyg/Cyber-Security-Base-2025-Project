@@ -1,0 +1,9 @@
+/* polls/static/polls/style.css */
+
+li a {
+    color: green;
+}
+
+body {
+    background: white url("images/sly_camera.png") no-repeat;
+}
