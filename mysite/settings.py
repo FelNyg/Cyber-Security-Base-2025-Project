@@ -28,7 +28,7 @@ DEBUG = True
 # 1st Flaw: Security Misconfiguration, DEBUG = True in production settings
 # Fix: Set DEBUG = False in production to prevent detailed error messages
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition

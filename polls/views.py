@@ -50,7 +50,7 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
-    
+
 # 5th Flaw: A5:2017 - Broken Access Control: No login required for this view
 # Fix: Uncomment the decorator below to require login
 # @login_required

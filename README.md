@@ -16,7 +16,7 @@
    - Windows:
      `env\Scripts\activate.bat`
 
-4. Install the requirements:
+4. Install the required dependencies
 
    `pip install -r requirements.txt`
 
@@ -86,7 +86,6 @@ A1:2017 – Injection: Unsanitized user input directly in database query
 In the `search` function, user input from the search query is directly inserted into an SQL query without validation or sanitization. This allows malicious users to inject SQL code, potentially compromising the database and accessing unauthorized data. This vulnerability is known as SQL Injection, which can expose sensitive data.
 
 ```python
-# polls/views.py
 from django.shortcuts import render
 from django.db import connection
 
@@ -103,7 +102,6 @@ def search(request):
 Use Django’s ORM, which safely processes user input and prevents SQL injection.
 
 ```python
-# polls/views.py
 from .models import Question
 
 def search(request):
@@ -121,7 +119,18 @@ The vulnerable code can be found in `polls/views.py` (line 59) and the template 
 A5:2017 – Broken Access Control
 
 # What’s the issue?
-
+The search view is accessible to any user, even if they’re not logged in. This could allow unauthorized users to probe or scrape questions from the system. 
 
 # How to fix it:
+Restrict access to the search view by using Django’s @login_required decorator. This ensures only authenticated users can perform searches.
+
+```python
+@login_required
+def search(request):
+    query = request.GET.get("q", "")
+    results = Question.objects.filter(question_text__icontains=query)
+    return render(request, "polls/search.html", {"results": results})
+```
+The vulnerable code can be found in polls/views.py (line 56).
+
 
