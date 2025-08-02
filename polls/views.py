@@ -48,3 +48,11 @@ def vote(request, question_id):
         selected_choice.votes = F("votes") + 1
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
+    
+def search(request):
+    query = request.GET.get("q", "")
+    # 4th Flaw: A1:2017 - Injection: Unsanitized user input directly in database query
+    # Fix: Use Django's ORM for safe queries
+    # results = Question.objects.filter(question_text__icontains=query)
+    results = Question.objects.raw(f"SELECT * FROM polls_question WHERE question_text LIKE '%{query}%'")
+    return render(request, "polls/search.html", {"results": results})

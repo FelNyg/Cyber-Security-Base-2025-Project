@@ -1,5 +1,34 @@
 # Cyber-Security-Base-2025-Project
 
+## Installation Guide
+------------------
+
+1. Clone the repository to your machine:
+
+
+2. Create a virtual environment inside the project folder:
+
+   `python -m venv env`
+
+3. Activate the virtual environment:
+   - Mac/Unix:
+     `source env/bin/activate`
+   - Windows:
+     `env\Scripts\activate.bat`
+
+4. Install the requirements:
+
+   `pip install -r requirements.txt`
+
+## How to Start the Project
+------------------------
+
+Run the following commands in the terminal:
+
+   `python manage.py makemigrations`
+   `python manage.py migrate`
+   `python manage.py runserver`
+
 ## User info
 
 | User  | Password  | admin    |
@@ -51,22 +80,48 @@ The code can be found in mysite/settings.py (line 136)
 
 ## 4. Fault
 
+A1:2017 – Injection: Unsanitized user input directly in database query
 
+# What’s the issue?
+In the `search` function, user input from the search query is directly inserted into an SQL query without validation or sanitization. This allows malicious users to inject SQL code, potentially compromising the database and accessing unauthorized data. This vulnerability is known as SQL Injection, which can expose sensitive data.
 
-# Fault Explanation:
+```python
+# polls/views.py
+from django.shortcuts import render
+from django.db import connection
 
+def search(request):
+    query = request.GET.get('q', '')
+    # Vulnerable: direct string formatting in SQL
+    with connection.cursor() as cursor:
+        cursor.execute(f"SELECT * FROM polls_question WHERE question_text LIKE '%{query}%'")
+        results = cursor.fetchall()
+    return render(request, 'polls/search.html', {'results': results})
+```
 
+# How to fix it:
+Use Django’s ORM, which safely processes user input and prevents SQL injection.
 
+```python
+# polls/views.py
+from .models import Question
 
-# Fix Explanation:
+def search(request):
+    query = request.GET.get('q', '')
+    results = Question.objects.filter(question_text__icontains=query)
+    return render(request, 'polls/search.html', {'results': results})
+```
+
+The vulnerable code can be found in `polls/views.py` (line 59) and the template in `polls/templates/polls/search.html`.
 
 
 
 ## 5. Fault
 
+A5:2017 – Broken Access Control
+
+# What’s the issue?
 
 
-# Fault Explanation:
+# How to fix it:
 
-
-# Fix Explanation:

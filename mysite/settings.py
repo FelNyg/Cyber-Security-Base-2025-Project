@@ -127,6 +127,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 2nd Flaw: Sensitive Data Exposure, SECURE_SSL_REDIRECT is not set to True
+SECURE_SSL_REDIRECT = False
 # Fix: Set SECURE_SSL_REDIRECT = True in production to force HTTPS
 # SECURE_SSL_REDIRECT = True
 

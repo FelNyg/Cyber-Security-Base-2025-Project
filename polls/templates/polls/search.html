@@ -1,0 +1,20 @@
+<h1>Search Questions</h1>
+
+<form method="get" action="{% url 'polls:search' %}">
+    <input type="text" name="q" placeholder="Search for a question..." value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+    <h2>Results:</h2>
+    <ul>
+        {% for question in results %}
+            <li>
+                <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+            </li>
+        {% empty %}
+            <li>No questions found.</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
