@@ -152,3 +152,6 @@ SECURE_SSL_REDIRECT = False
 #         },
 #     },
 # }
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/polls/'
