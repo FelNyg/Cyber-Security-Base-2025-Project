@@ -24,9 +24,9 @@ https://github.com/FelNyg/Cyber-Security-Base-2025-Project
    - Windows:
      `env\Scripts\activate.bat`
 
-4. Install the required dependencies
+4. Install Django
 
-   `pip install -r requirements.txt`
+   `pip install django`
 
 ## How to Start the Project
 ------------------------
