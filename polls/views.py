@@ -6,6 +6,8 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+import logging
 
 from .models import Choice, Question
 
@@ -51,18 +53,24 @@ def vote(request, question_id):
         selected_choice.save()
         return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
 
-# 5th Flaw: A5:2017 - Broken Access Control: No login required for this view
+# 3th Flaw: A5:2017 - Broken Access Control: No login required for this view
 # Fix: Uncomment the decorator below to require login
-# @login_required
+#@login_required
 def search(request):
     query = request.GET.get("q", "")
-    # 4th Flaw: A1:2017 - Injection: Unsanitized user input directly in database query
+    # 5th Flaw: A1:2017 - Injection: Unsanitized user input directly in database query
+    results = Question.objects.raw(f"SELECT * FROM polls_question WHERE question_text LIKE '%{query}%'")
     # Fix: Use Django's ORM for safe queries
     # results = Question.objects.filter(question_text__icontains=query)
-    results = Question.objects.raw(f"SELECT * FROM polls_question WHERE question_text LIKE '%{query}%'")
     return render(request, "polls/search.html", {"results": results})
 
+logger = logging.getLogger('django.security')
 
+class CustomLoginView(LoginView):
+    def form_invalid(self, form):
+        username = self.request.POST.get("username", "")
+        logger.warning(f"Failed login attempt for username: '{username}' from IP: {self.request.META.get('REMOTE_ADDR')}")
+        return super().form_invalid(form)
 
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--^+(l673k48wqu%t^fu%cd_c5$f=o3v=+00-l=4y%y02lhyfp9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# 1st Flaw: Security Misconfiguration
 DEBUG = True
-
-# 1st Flaw: Security Misconfiguration, DEBUG = True in production settings
 # Fix: Set DEBUG = False in production to prevent detailed error messages
+
 
 ALLOWED_HOSTS = ["*"]
 
@@ -129,29 +129,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 2nd Flaw: Sensitive Data Exposure, SECURE_SSL_REDIRECT is not set to True
 SECURE_SSL_REDIRECT = False
 # Fix: Set SECURE_SSL_REDIRECT = True in production to force HTTPS
-# SECURE_SSL_REDIRECT = True
 
-# 3rd Flaw: A10:2017 - Missing Security Logging
-# Fix: Enable security event logging to detect and respond to threats
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'file': {
-#             'level': 'WARNING',
-#             'class': 'logging.FileHandler',
-#             'filename': 'security.log',
-#         },
-#     },
-#     'loggers': {
-#         'django.security': {
-#             'handlers': ['file'],
-#             'level': 'WARNING',
-#             'propagate': False,
-#         },
-#     },
-# }
+# 4th Flaw: A10:2017 - Missing Security Logging
+# Fix: Enable security event logging to detect and respond to threats, so uncommment the LOGGING configuration below.
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+        },
+    },
+    'loggers': {
+        'django.security': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/polls/'
